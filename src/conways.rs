@@ -26,7 +26,7 @@ impl Grid {
         *inner = state;
     }
 
-    fn get_cell(self, position: Position) -> State {
+    fn get_cell(&self, position: Position) -> State {
         let x: usize = position.0 as usize;
         let y: usize = position.1 as usize;
 
@@ -50,10 +50,27 @@ impl Grid {
         (x, y)
     }
 
-    fn update_cells(&mut self) {
-        // let new_grid = HashSet::new();
-        let iter = self.cells.iter().flatten().enumerate();
-        let a: Vec<_>  = iter.map(|a| println!("Cell value {}: {:?}", a.0, a.1)).collect();
+    fn alive_neighbors_amount(&self, position: &Position) -> i32 {
+        let neighbor_change: [(i32, i32); 8] = [(0,1), (1,0), (-1, 0), (0, -1),
+			 (1,1), (-1, 1), (1, -1), (-1, -1)];
+
+        let neighbors = neighbor_change.iter()
+	  .map(|change| {
+	      (change.0 + position.0 as i32,
+	       change.1 + position.1 as i32)
+	  })
+	  .filter(|coord| {
+	      let limit: i32 = self.cells.len().try_into().unwrap();
+	      coord.0 < limit && coord.1 < limit
+	  });
+
+        let alive_neighbors = neighbors
+	  .map(|cell| (cell.0 as u32, cell.1 as u32))
+	  .filter(|cell| self.get_cell(*cell)  == State::Alive)
+	  .fold(0, |acc, _| acc + 1);
+
+        alive_neighbors
+
     }
 }
 
@@ -94,6 +111,24 @@ mod tests {
         assert_eq!((4, 0), grid.coordinate_from_position(4));
 
         assert_eq!((4, 4), grid.coordinate_from_position(24));
+    }
+
+    #[test]
+    fn get_live_neighbors() {
+        let mut grid = Grid::new(5);
+        // Matrix of size 5
+        // 0  1  2  3  4
+        // 5  6  7  8  9
+        // 10 11 12 13 14
+        // 15 16  A 18  A
+        // 20 21 22  A 24
+
+        grid.change_state((4,3), State::Alive);
+        grid.change_state((3,4), State::Alive);
+        grid.change_state((2,3), State::Alive);
+
+        let alive = grid.alive_neighbors_amount(&(3,3));
+        assert_eq!(3, alive);
     }
 
 
