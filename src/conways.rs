@@ -1,7 +1,7 @@
 #[derive(Debug, Clone, PartialEq, Copy)]
 enum State {
     Alive,
-    Dead
+    Dead,
 }
 
 type Position = (u32, u32);
@@ -10,10 +10,11 @@ struct Grid {
     cells: Vec<Vec<State>>,
 }
 
-
 impl Grid {
     pub fn new(size: usize) -> Grid {
-        Grid { cells: vec![vec![State::Dead; size]; size], } 
+        Grid {
+            cells: vec![vec![State::Dead; size]; size],
+        }
     }
 
     pub fn change_state(&mut self, position: Position, state: State) {
@@ -51,28 +52,32 @@ impl Grid {
     }
 
     fn alive_neighbors_amount(&self, position: &Position) -> i32 {
-        let neighbor_change: [(i32, i32); 8] = [(0,1), (1,0), (-1, 0), (0, -1),
-			 (1,1), (-1, 1), (1, -1), (-1, -1)];
+        let neighbor_change: [(i32, i32); 8] = [
+            (0, 1),
+            (1, 0),
+            (-1, 0),
+            (0, -1),
+            (1, 1),
+            (-1, 1),
+            (1, -1),
+            (-1, -1),
+        ];
 
-        let neighbors = neighbor_change.iter()
-	  .map(|change| {
-	      (change.0 + position.0 as i32,
-	       change.1 + position.1 as i32)
-	  })
-	  .filter(|coord| {
-	      let limit: i32 = self.cells.len().try_into().unwrap();
-	      coord.0 < limit && coord.1 < limit
-	  });
+        let neighbors = neighbor_change
+            .iter()
+            .map(|change| (change.0 + position.0 as i32, change.1 + position.1 as i32))
+            .filter(|coord| {
+                let limit: i32 = self.cells.len().try_into().unwrap();
+                coord.0 < limit && coord.1 < limit
+            });
 
         let alive_neighbors = neighbors
-	  .map(|cell| (cell.0 as u32, cell.1 as u32))
-	  .filter(|cell| self.get_cell(*cell)  == State::Alive)
-	  .fold(0, |acc, _| acc + 1);
+            .map(|cell| (cell.0 as u32, cell.1 as u32))
+            .filter(|cell| self.get_cell(*cell) == State::Alive)
+            .fold(0, |acc, _| acc + 1);
 
         alive_neighbors
-
     }
-}
 
 
 #[cfg(test)]
@@ -87,12 +92,12 @@ mod tests {
     #[test]
     fn update_cells() {
         let mut grid = Grid::new(5);
-        grid.change_state((3,3), State::Alive);
+        grid.change_state((3, 3), State::Alive);
         assert_eq!(grid.get_cell((3, 3)), State::Alive);
-        grid.change_state((3,3), State::Dead);
+        grid.change_state((3, 3), State::Dead);
         assert_eq!(grid.get_cell((3, 3)), State::Dead);
-        grid.change_state((3,3), State::Alive);
-        assert_eq!(grid.get_cell((3,3)), State::Alive);
+        grid.change_state((3, 3), State::Alive);
+        assert_eq!(grid.get_cell((3, 3)), State::Alive);
     }
 
     #[test]
@@ -123,13 +128,11 @@ mod tests {
         // 15 16  A 18  A
         // 20 21 22  A 24
 
-        grid.change_state((4,3), State::Alive);
-        grid.change_state((3,4), State::Alive);
-        grid.change_state((2,3), State::Alive);
+        grid.change_state((4, 3), State::Alive);
+        grid.change_state((3, 4), State::Alive);
+        grid.change_state((2, 3), State::Alive);
 
-        let alive = grid.alive_neighbors_amount(&(3,3));
+        let alive = grid.alive_neighbors_amount(&(3, 3));
         assert_eq!(3, alive);
     }
-
-
 }
