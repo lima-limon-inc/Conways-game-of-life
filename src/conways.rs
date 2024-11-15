@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Copy)]
 enum State {
     Alive,
     Dead
@@ -24,6 +24,15 @@ impl Grid {
         let inner = &mut outer[x];
 
         *inner = state;
+    }
+
+    fn get_cell(self, position: Position) -> State {
+        let x: usize = position.0 as usize;
+        let y: usize = position.1 as usize;
+
+        let outer = &self.cells[y];
+        let state = outer[x];
+        return state;
     }
 
     pub fn update(&mut self) {
