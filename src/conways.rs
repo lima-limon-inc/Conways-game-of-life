@@ -38,12 +38,12 @@ impl Grid {
     // }
 
     //TODO: I think this funciton's name could be improved
-    fn coordinate_from_position(&self, enumeration: u32) -> Position {
+    fn coordinate_from_position(&self, position: u32) -> Position {
         let n = self.cells.len();
 
-        let x = enumeration % n as u32;
+        let x = position % n as u32;
         let x = x as usize;
-        let y: f32 = enumeration as f32 / n as f32;
+        let y: f32 = position as f32 / n as f32;
         let y = y.floor() as u32;
         let y = y as usize;
 
