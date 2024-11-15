@@ -67,8 +67,6 @@ mod tests {
         assert_eq!(grid.cells[3][3], State::Dead);
         grid.change_state((3,3), State::Alive);
         assert_eq!(grid.cells[3][3], State::Alive);
-
-        grid.update_cells();
     }
 
     #[test]
