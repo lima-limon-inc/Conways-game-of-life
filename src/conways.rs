@@ -88,11 +88,11 @@ mod tests {
     fn update_cells() {
         let mut grid = Grid::new(5);
         grid.change_state((3,3), State::Alive);
-        assert_eq!(grid.cells[3][3], State::Alive);
+        assert_eq!(grid.get_cell((3, 3)), State::Alive);
         grid.change_state((3,3), State::Dead);
-        assert_eq!(grid.cells[3][3], State::Dead);
+        assert_eq!(grid.get_cell((3, 3)), State::Dead);
         grid.change_state((3,3), State::Alive);
-        assert_eq!(grid.cells[3][3], State::Alive);
+        assert_eq!(grid.get_cell((3,3)), State::Alive);
     }
 
     #[test]
