@@ -1,4 +1,8 @@
 all:
 	cargo build
 
-.PHONY: all
+test:
+	cargo test -- --nocapture
+
+.PHONY: all test
+

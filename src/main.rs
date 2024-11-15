@@ -1,5 +1,7 @@
 use macroquad::prelude::*;
 
+mod conways;
+
 #[macroquad::main("BasicShapes")]
 async fn main() {
     loop {
