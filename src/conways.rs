@@ -4,7 +4,7 @@ enum State {
     Dead,
 }
 
-type Position = (u32, u32);
+type Position = (usize, usize);
 
 struct Grid {
     cells: Vec<Vec<State>>,
@@ -18,8 +18,7 @@ impl Grid {
     }
 
     pub fn change_state(&mut self, position: Position, state: State) {
-        let x: usize = position.0 as usize;
-        let y: usize = position.1 as usize;
+        let (x, y) = position;
 
         let outer = &mut self.cells[y];
         let inner = &mut outer[x];
@@ -28,30 +27,30 @@ impl Grid {
     }
 
     fn get_cell(&self, position: Position) -> State {
-        let x: usize = position.0 as usize;
-        let y: usize = position.1 as usize;
+        let (x, y) = position;
 
         let outer = &self.cells[y];
         let state = outer[x];
         return state;
     }
 
-    pub fn update(&mut self) {
-    }
+    // pub fn update(&mut self) {
+    // }
 
     //TODO: I think this funciton's name could be improved
     fn coordinate_from_position(&self, enumeration: u32) -> Position {
-
         let n = self.cells.len();
 
         let x = enumeration % n as u32;
+        let x = x as usize;
         let y: f32 = enumeration as f32 / n as f32;
         let y = y.floor() as u32;
+        let y = y as usize;
 
         (x, y)
     }
 
-    fn alive_neighbors_amount(&self, position: &Position) -> i32 {
+    fn alive_neighbors_amount(&self, position: &Position) -> u32 {
         let neighbor_change: [(i32, i32); 8] = [
             (0, 1),
             (1, 0),
@@ -66,17 +65,17 @@ impl Grid {
         let neighbors = neighbor_change
             .iter()
             .map(|change| (change.0 + position.0 as i32, change.1 + position.1 as i32))
-            .filter(|coord| {
+            .filter(|(x, y)| {
                 let limit: i32 = self.cells.len().try_into().unwrap();
-                coord.0 < limit && coord.1 < limit
+                *x < limit && *y < limit
             });
 
         let alive_neighbors = neighbors
-            .map(|cell| (cell.0 as u32, cell.1 as u32))
+            .map(|cell| (cell.0 as usize, cell.1 as usize))
             .filter(|cell| self.get_cell(*cell) == State::Alive)
-            .fold(0, |acc, _| acc + 1);
+            .count();
 
-        alive_neighbors
+        alive_neighbors as u32
     }
 
 }
