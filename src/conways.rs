@@ -1,11 +1,11 @@
 use std::collections::HashSet;
 
-type Limit = (i32, i32);
+type Position = (i32, i32);
 
 struct Grid {
-    alive_cells: HashSet<(i32, i32)>,
-    upper_left: Limit,
-    lower_right: Limit,
+    alive_cells: HashSet<Position>,
+    upper_left: Position,
+    lower_right: Position,
 }
 
 
