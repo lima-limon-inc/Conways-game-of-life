@@ -79,6 +79,7 @@ impl Grid {
         alive_neighbors
     }
 
+}
 
 #[cfg(test)]
 mod tests {
