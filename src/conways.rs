@@ -166,6 +166,7 @@ mod tests {
         // 10 11 12 13 14
         // 15 16 17 18 19
         // 20 21 22 23 24
+        assert_eq!((0, 0), grid.coordinate_from_position(0));
         assert_eq!((3, 2), grid.coordinate_from_position(13));
 
         assert_eq!((1, 3), grid.coordinate_from_position(16));
