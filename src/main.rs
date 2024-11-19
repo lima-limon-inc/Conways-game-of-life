@@ -9,11 +9,13 @@ use conways::*;
 
 #[macroquad::main("BasicShapes")]
 async fn main() {
-    let mut grid = Grid::new(5);
+    let mut grid = Grid::new(25);
 
-    grid.change_state((1, 1), State::Alive);
-    grid.change_state((1, 2), State::Alive);
+    grid.change_state((2, 1), State::Alive);
+    grid.change_state((2, 2), State::Alive);
+    grid.change_state((2, 3), State::Alive);
     grid.change_state((1, 3), State::Alive);
+    grid.change_state((0, 2), State::Alive);
 
     let mut last_updated = get_time();
 
@@ -27,11 +29,11 @@ async fn main() {
 		State::Dead  => WHITE,
 	      };
 
-	      let offset_x = grid.get_width() + 100 * x;
-	      let offset_y = grid.get_height() + 100 * y;
+	      let offset_x = 0.0 + (cube_width + 10.0) * x as f32 + 5.0;
+	      let offset_y = 0.0 + (cube_width + 10.0) * y as f32;
 
 	      println!("{:?}", (x,y));
-	      draw_rectangle(offset_x as f32,  offset_y as f32, 50.0, 50.0, color);
+	      draw_rectangle(offset_x as f32,  offset_y as f32, cube_width, cube_width, color);
 	  }
         }
 
