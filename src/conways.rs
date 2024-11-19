@@ -271,4 +271,29 @@ mod tests {
         grid.update();
         assert_eq!(grid.get_state((0, 1)), State::Alive);
     }
+
+    #[test]
+    fn calculate_next_grid_4() {
+        let mut grid = Grid::new(5);
+        // Matrix of size 5
+        // A  1  2  3  4
+        // 5  A  7  8  9
+        // A 11 12 13 14
+        // 15 16 17 18 19
+        // 20 21 22 23 24
+
+        //5 should revive, due to 3 neighbours
+
+        grid.change_state((0, 0), State::Alive);
+        grid.change_state((0, 2), State::Alive);
+        grid.change_state((1, 1), State::Alive);
+
+        // It should start out dead. We kill the cell just in case.
+        grid.change_state((0, 1), State::Dead);
+
+
+        grid.show_display();
+        grid.update();
+        assert_eq!(grid.get_state((0, 1)), State::Alive);
+    }
 }
