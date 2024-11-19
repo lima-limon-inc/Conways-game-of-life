@@ -43,7 +43,7 @@ impl Grid {
 	  } else if alive_neighbours == 2 || alive_neighbours == 3 {
 	      State::Alive
 	  } else if alive_neighbours > 3 {
-	      State::Alive
+	      State::Dead
 	  } else {
 	      State::Dead
 	  }
