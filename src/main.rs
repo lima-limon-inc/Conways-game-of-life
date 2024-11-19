@@ -89,7 +89,7 @@ async fn main() {
 
 fn check_for_events(keys: &[KeyCode; 10], grid: &mut Grid, pause: bool) -> bool {
     match keys {
-        [KeyCode::Up, KeyCode::Up, KeyCode::Down, KeyCode::Down, KeyCode::Left, KeyCode::Right, KeyCode::Left, KeyCode::Right, KeyCode::A, KeyCode::B] =>
+        [KeyCode::Up, KeyCode::Up, KeyCode::Down, KeyCode::Down, KeyCode::Left, KeyCode::Right, KeyCode::Left, KeyCode::Right, KeyCode::B, KeyCode::A] =>
         {
             grid.kill_all();
 
