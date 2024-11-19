@@ -75,7 +75,7 @@ impl Grid {
     fn show_display(&self) {
         for i in 0..self.cells.len() {
 	  for j in 0..self.cells.len() {
-	      if self.get_state((i, j)) == State::Alive {
+	      if self.get_state((j, i)) == State::Alive {
 		print!("A");
 	      } else {
 		print!("D");
