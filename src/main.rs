@@ -2,16 +2,38 @@ use macroquad::prelude::*;
 
 mod conways;
 
+use conways::*;
+
+
 #[macroquad::main("BasicShapes")]
 async fn main() {
+    let mut grid = Grid::new(5);
+
+    grid.change_state((1, 1), State::Alive);
+    grid.change_state((1, 2), State::Alive);
+    grid.change_state((1, 3), State::Alive);
+
+    let mut last_updated = get_time();
+
     loop {
-        clear_background(RED);
+        clear_background(GRAY);
 
-        draw_line(40.0, 40.0, 100.0, 200.0, 15.0, BLUE);
-        draw_rectangle(screen_width() / 2.0 - 60.0, 100.0, 120.0, 60.0, GREEN);
-        draw_circle(screen_width() - 30.0, screen_height() - 30.0, 15.0, YELLOW);
+        for x in 0..grid.get_height() {
+	  for y in 0..grid.get_width() {
+	      let color = match grid.get_state((x, y)) {
+		State::Alive => BLACK,
+		State::Dead  => WHITE,
+	      };
 
-        draw_text("IT WORKS!", 20.0, 20.0, 30.0, DARKGRAY);
+	      let offset_x = grid.get_width() + 100 * x;
+	      let offset_y = grid.get_height() + 100 * y;
+
+	      println!("{:?}", (x,y));
+	      draw_rectangle(offset_x as f32,  offset_y as f32, 50.0, 50.0, color);
+	  }
+        }
+
+
 
         next_frame().await
     }
