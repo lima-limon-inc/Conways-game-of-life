@@ -71,8 +71,6 @@ impl Grid {
     }
 
     fn alive_neighbors_amount(&self, position: Position) -> u32 {
-        println!("POSITION: {:?}", position);
-        
         let neighbor_change: [(i32, i32); 8] = [
             (0, 1),
             (1, 0),
@@ -111,10 +109,13 @@ impl Grid {
 	  //Turn enumerate into coordinates
 	  .map(|a| (self.coordinate_from_position(a.0), a.1))
 	  .map(|a| (a.0, self.determine_new_state(a.0, a.1)))
-	  .map(|a| println!("{:?}",a))
+	  // .map(|a| println!("{:?}",a))
 	  .collect();
 
-        // self.cells = new_grid;
+        // Apply side effects
+        for i in &new_states {
+	  self.change_state(i.0, i.1);
+        }
     }
     
 
