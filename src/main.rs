@@ -1,5 +1,7 @@
 use macroquad::prelude::*;
 
+const UPDATE_INTERVAL: f64 = 1.0;
+
 mod conways;
 
 use conways::*;
@@ -33,6 +35,10 @@ async fn main() {
 	  }
         }
 
+        if get_time() - last_updated > UPDATE_INTERVAL {
+            last_updated = get_time();
+	  grid.update();
+        }
 
 
         next_frame().await
