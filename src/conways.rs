@@ -34,6 +34,28 @@ impl Grid {
         return state;
     }
 
+    fn determine_new_state(&self, position: Position, current_state: &State) -> State {
+        let alive_neighbours = self.alive_neighbors_amount(position);
+
+        if *current_state == State::Alive {
+	  if alive_neighbours < 2 {
+	      State::Dead
+	  } else if alive_neighbours == 2 || alive_neighbours == 3 {
+	      State::Alive
+	  } else if alive_neighbours > 3 {
+	      State::Alive
+	  } else {
+	      State::Dead
+	  }
+        } else {
+	  if alive_neighbours == 3 {
+	      State::Alive
+	  } else {
+	      State::Dead
+	  }
+        }
+
+    }
 
     //TODO: I think this funciton's name could be improved
     fn coordinate_from_position(&self, position: usize) -> Position {
