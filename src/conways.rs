@@ -199,18 +199,20 @@ mod tests {
         // Matrix of size 5
         // 0  1  2  3  4
         // 5  6  7  8  9
-        // 10 11 12 13 14
+        // 10 11 12 A 14
         // 15 16  A A>D  A
         // 20 21 22  A 24
 
         //18 should die
 
+        grid.change_state((3, 2), State::Alive);
         grid.change_state((2, 3), State::Alive);
         grid.change_state((3, 4), State::Alive);
-        grid.change_state((2, 3), State::Alive);
+        grid.change_state((4, 3), State::Alive);
+
         grid.change_state((3, 3), State::Alive);
 
-        let alive = grid.alive_neighbors_amount((0, 1));
-        assert_eq!(0, alive);
+        grid.update();
+        assert_eq!(grid.get_state((3, 3)), State::Dead);
     }
 }
