@@ -17,7 +17,7 @@ impl Grid {
         }
     }
 
-    pub fn change_state(&mut self, position: Position, state: State) {
+    fn change_state(&mut self, position: Position, state: State) {
         let (x, y) = position;
 
         let outer = &mut self.cells[y];
@@ -34,8 +34,6 @@ impl Grid {
         return state;
     }
 
-    // pub fn update(&mut self) {
-    // }
 
     //TODO: I think this funciton's name could be improved
     fn coordinate_from_position(&self, position: u32) -> Position {
@@ -138,7 +136,7 @@ mod tests {
         grid.change_state((3, 4), State::Alive);
         grid.change_state((2, 3), State::Alive);
 
-        let alive = grid.alive_neighbors_amount(&(3, 3));
+        let alive = grid.alive_neighbors_amount((3, 3));
         assert_eq!(3, alive);
     }
 }
