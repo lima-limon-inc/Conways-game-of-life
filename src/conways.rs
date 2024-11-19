@@ -82,6 +82,8 @@ impl Grid {
 
     // TODO: THis could use the Display trait instead of being
     // a separate function
+    #[allow(dead_code)]
+    // Funciton used for debugging
     fn show_display(&self) {
         for i in 0..self.cells.len() {
             for j in 0..self.cells.len() {
