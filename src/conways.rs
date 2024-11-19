@@ -122,9 +122,9 @@ impl Grid {
 	  .flatten()
 	  .enumerate()
 	  //Turn enumerate into coordinates
-	  .map(|a| (self.coordinate_from_position(a.0), a.1))
-	  .map(|a| (a.0, self.determine_new_state(a.0, a.1)))
-	  // .map(|a| println!("{:?}",a))
+	  .map(|a| self.coordinate_from_position(a.0))
+	  .map(|a| (a, self.get_state(a)))
+	  .map(|a| (a.0, self.determine_new_state(a.0, &a.1)))
 	  .collect();
 
         // Apply side effects
