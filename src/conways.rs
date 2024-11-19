@@ -38,23 +38,22 @@ impl Grid {
         let alive_neighbours = self.alive_neighbors_amount(position);
 
         if *current_state == State::Alive {
-	  if alive_neighbours < 2 {
-	      State::Dead
-	  } else if alive_neighbours == 2 || alive_neighbours == 3 {
-	      State::Alive
-	  } else if alive_neighbours > 3 {
-	      State::Dead
-	  } else {
-	      State::Dead
-	  }
+            if alive_neighbours < 2 {
+                State::Dead
+            } else if alive_neighbours == 2 || alive_neighbours == 3 {
+                State::Alive
+            } else if alive_neighbours > 3 {
+                State::Dead
+            } else {
+                State::Dead
+            }
         } else {
-	  if alive_neighbours == 3 {
-	      State::Alive
-	  } else {
-	      State::Dead
-	  }
+            if alive_neighbours == 3 {
+                State::Alive
+            } else {
+                State::Dead
+            }
         }
-
     }
 
     //TODO: I think this funciton's name could be improved
@@ -74,14 +73,14 @@ impl Grid {
     // a separate function
     fn show_display(&self) {
         for i in 0..self.cells.len() {
-	  for j in 0..self.cells.len() {
-	      if self.get_state((j, i)) == State::Alive {
-		print!("A");
-	      } else {
-		print!("D");
-	      }
-	  }
-	  println!()
+            for j in 0..self.cells.len() {
+                if self.get_state((j, i)) == State::Alive {
+                    print!("A");
+                } else {
+                    print!("D");
+                }
+            }
+            println!()
         }
     }
 
@@ -104,9 +103,7 @@ impl Grid {
                 let limit: i32 = self.cells.len().try_into().unwrap();
                 *x < limit && *y < limit
             })
-            .filter(|(x, y)| {
-                *x >= 0 && *y >= 0
-            });
+            .filter(|(x, y)| *x >= 0 && *y >= 0);
 
         let alive_neighbors = neighbors
             .map(|cell| (cell.0 as usize, cell.1 as usize))
@@ -117,23 +114,22 @@ impl Grid {
     }
 
     pub fn update(&mut self) {
-        let new_states: Vec<_> = self.cells
-	  .iter()
-	  .flatten()
-	  .enumerate()
-	  //Turn enumerate into coordinates
-	  .map(|a| self.coordinate_from_position(a.0))
-	  .map(|a| (a, self.get_state(a)))
-	  .map(|a| (a.0, self.determine_new_state(a.0, &a.1)))
-	  .collect();
+        let new_states: Vec<_> = self
+            .cells
+            .iter()
+            .flatten()
+            .enumerate()
+            //Turn enumerate into coordinates
+            .map(|a| self.coordinate_from_position(a.0))
+            .map(|a| (a, self.get_state(a)))
+            .map(|a| (a.0, self.determine_new_state(a.0, &a.1)))
+            .collect();
 
         // Apply side effects
         for i in &new_states {
-	  self.change_state(i.0, i.1);
+            self.change_state(i.0, i.1);
         }
     }
-    
-
 }
 
 #[cfg(test)]
@@ -208,7 +204,6 @@ mod tests {
         assert_eq!(0, alive);
     }
 
-    
     #[test]
     fn kill_cell_overpopulation() {
         let mut grid = Grid::new(5);
@@ -290,7 +285,6 @@ mod tests {
 
         // It should start out dead. We kill the cell just in case.
         grid.change_state((0, 1), State::Dead);
-
 
         grid.show_display();
         grid.update();
