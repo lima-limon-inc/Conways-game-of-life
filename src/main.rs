@@ -78,15 +78,17 @@ async fn main() {
 	  grid.update();
         }
 
-        check_for_events(&keys, &mut grid);
+        pause = check_for_events(&keys, &mut grid);
 
         next_frame().await
     }
 }
 
-fn check_for_events(keys: &[KeyCode; 10], grid: &mut Grid) {
+fn check_for_events(keys: &[KeyCode; 10], grid: &mut Grid) -> bool {
     match keys {
         [KeyCode::Up, KeyCode::Up, KeyCode::Down, KeyCode::Down, KeyCode::Left, KeyCode::Right, KeyCode::Left, KeyCode::Right, KeyCode::A, KeyCode::B] => {
+
+	  grid.kill_all();
 
 	  // Hmm, I wonder what this does 🤔 
 	  grid.change_state((9, 1), State::Alive);
@@ -148,7 +150,9 @@ fn check_for_events(keys: &[KeyCode; 10], grid: &mut Grid) {
 	  grid.change_state((16, 15), State::Alive);
 	  grid.change_state((17, 15), State::Alive);
 	  grid.change_state((18, 14), State::Alive);
+
+	  true
         },
-        _ => ()
+        _ => false
     }
 }

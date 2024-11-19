@@ -43,6 +43,11 @@ impl Grid {
         return state;
     }
 
+    pub fn kill_all(&mut self) {
+            let new_cells = vec![vec![State::Dead; self.cells.len() ]; self.cells.len()];
+        self.cells = new_cells;
+    }
+
     fn determine_new_state(&self, position: Position, current_state: &State) -> State {
         let alive_neighbours = self.alive_neighbors_amount(position);
 
