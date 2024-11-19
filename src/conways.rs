@@ -161,4 +161,40 @@ mod tests {
         let alive = grid.alive_neighbors_amount((3, 3));
         assert_eq!(3, alive);
     }
+
+    #[test]
+    fn get_live_neighbors_all_dead() {
+        let mut grid = Grid::new(5);
+        // Matrix of size 5
+        // 0  1  2  3  4
+        // 5  6  7  8  9
+        // 10 11 12 13 14
+        // 15 16  A 18  A
+        // 20 21 22  A 24
+
+        let alive = grid.alive_neighbors_amount((0, 1));
+        assert_eq!(0, alive);
+    }
+
+    
+    #[test]
+    fn calculate_next_grid_1() {
+        let mut grid = Grid::new(5);
+        // Matrix of size 5
+        // 0  1  2  3  4
+        // 5  6  7  8  9
+        // 10 11 12 13 14
+        // 15 16  A A>D  A
+        // 20 21 22  A 24
+
+        //18 should die
+
+        grid.change_state((2, 3), State::Alive);
+        grid.change_state((3, 4), State::Alive);
+        grid.change_state((2, 3), State::Alive);
+        grid.change_state((3, 3), State::Alive);
+
+        let alive = grid.alive_neighbors_amount((0, 1));
+        assert_eq!(0, alive);
+    }
 }
