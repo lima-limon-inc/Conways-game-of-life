@@ -48,10 +48,7 @@ async fn main() {
 	  if offset == keys.len() {
 	      offset = 0;
 	  }
-	  match key {
-	      KeyCode::P => {pause = !pause;},
-	      _ => (),
-	  }
+	  if key == KeyCode::P {pause = !pause;}
         }
 
         for x in 0..grid.get_height() {
