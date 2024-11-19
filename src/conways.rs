@@ -70,6 +70,21 @@ impl Grid {
         (x, y)
     }
 
+    // TODO: THis could use the Display trait instead of being
+    // a separate function
+    fn show_display(&self) {
+        for i in 0..self.cells.len() {
+	  for j in 0..self.cells.len() {
+	      if self.get_state((i, j)) == State::Alive {
+		print!("A");
+	      } else {
+		print!("D");
+	      }
+	  }
+	  println!()
+        }
+    }
+
     fn alive_neighbors_amount(&self, position: Position) -> u32 {
         let neighbor_change: [(i32, i32); 8] = [
             (0, 1),
