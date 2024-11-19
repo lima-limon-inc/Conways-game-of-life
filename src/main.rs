@@ -71,7 +71,77 @@ async fn main() {
 	  grid.update();
         }
 
+        check_for_events(&keys, &mut grid);
 
         next_frame().await
+    }
+}
+
+fn check_for_events(keys: &[KeyCode; 10], grid: &mut Grid) {
+    match keys {
+        [KeyCode::Up, KeyCode::Up, KeyCode::Down, KeyCode::Down, KeyCode::Left, KeyCode::Right, KeyCode::Left, KeyCode::Right, KeyCode::A, KeyCode::B] => {
+
+	  // Hmm, I wonder what this does 🤔 
+	  grid.change_state((9, 1), State::Alive);
+	  grid.change_state((8, 1), State::Alive);
+	  grid.change_state((7, 2), State::Alive);
+	  grid.change_state((10, 2), State::Alive);
+	  grid.change_state((10, 3), State::Alive);
+	  grid.change_state((10, 4), State::Alive);
+	  grid.change_state((11, 5), State::Alive);
+	  grid.change_state((11, 6), State::Alive);
+	  grid.change_state((11, 7), State::Alive);
+	  grid.change_state((12, 8), State::Alive);
+	  grid.change_state((12, 9), State::Alive);
+	  grid.change_state((13, 10), State::Alive);
+	  grid.change_state((14, 10), State::Alive);
+	  grid.change_state((15, 9), State::Alive);
+
+	  grid.change_state((10, 8), State::Alive);
+	  grid.change_state((9, 9), State::Alive);
+	  grid.change_state((8, 10), State::Alive);
+
+	  grid.change_state((0, 15), State::Alive);
+	  grid.change_state((1, 15), State::Alive);
+	  grid.change_state((2, 15), State::Alive);
+	  grid.change_state((0, 14), State::Alive);
+	  grid.change_state((0, 13), State::Alive);
+	  grid.change_state((0, 12), State::Alive);
+	  grid.change_state((1, 12), State::Alive);
+	  grid.change_state((2, 12), State::Alive);
+
+	  grid.change_state((4, 14), State::Alive);
+	  grid.change_state((4, 13), State::Alive);
+	  grid.change_state((4, 12), State::Alive);
+	  grid.change_state((4, 15), State::Alive);
+	  grid.change_state((5, 15), State::Alive);
+	  grid.change_state((6, 15), State::Alive);
+
+	  grid.change_state((8, 14), State::Alive);
+	  grid.change_state((8, 13), State::Alive);
+	  grid.change_state((8, 12), State::Alive);
+	  grid.change_state((8, 15), State::Alive);
+	  grid.change_state((10, 14), State::Alive);
+	  grid.change_state((10, 13), State::Alive);
+	  grid.change_state((10, 12), State::Alive);
+	  grid.change_state((10, 15), State::Alive);
+	  grid.change_state((9,  12), State::Alive);
+	  grid.change_state((9,  14), State::Alive);
+
+	  grid.change_state((12, 13), State::Alive);
+	  grid.change_state((13, 12), State::Alive);
+	  grid.change_state((14, 12), State::Alive);
+	  grid.change_state((12, 15), State::Alive);
+	  grid.change_state((13, 15), State::Alive);
+	  grid.change_state((14, 14), State::Alive);
+
+	  grid.change_state((16, 13), State::Alive);
+	  grid.change_state((17, 12), State::Alive);
+	  grid.change_state((18, 12), State::Alive);
+	  grid.change_state((16, 15), State::Alive);
+	  grid.change_state((17, 15), State::Alive);
+	  grid.change_state((18, 14), State::Alive);
+        },
+        _ => ()
     }
 }
