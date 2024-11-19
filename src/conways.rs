@@ -36,10 +36,10 @@ impl Grid {
 
 
     //TODO: I think this funciton's name could be improved
-    fn coordinate_from_position(&self, position: u32) -> Position {
+    fn coordinate_from_position(&self, position: usize) -> Position {
         let n = self.cells.len();
 
-        let x = position % n as u32;
+        let x = position as u32 % n as u32;
         let x = x as usize;
         let y: f32 = position as f32 / n as f32;
         let y = y.floor() as u32;
