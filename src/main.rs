@@ -38,6 +38,8 @@ async fn main() {
     let cube_width  = 30.0;
     let cube_height = 30.0;
 
+    let mut pause = true;
+
     loop {
         clear_background(GRAY);
         println!("{:?}", keys);
@@ -47,6 +49,10 @@ async fn main() {
 	  offset += 1;
 	  if offset == keys.len() {
 	      offset = 0;
+	  }
+	  match key {
+	      KeyCode::P => {if pause == true {pause = false;} else {pause = true}},
+	      _ => (),
 	  }
         }
 
@@ -67,7 +73,7 @@ async fn main() {
 
         draw_text("P to pause", 0.0, screen_height() - 50.0, 60.0, BLACK);
 
-        if get_time() - last_updated > UPDATE_INTERVAL {
+        if get_time() - last_updated > UPDATE_INTERVAL && pause == false {
             last_updated = get_time();
 	  grid.update();
         }
