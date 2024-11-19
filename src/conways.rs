@@ -10,6 +10,7 @@ pub struct Grid {
     cells: Vec<Vec<State>>,
 }
 
+
 impl Grid {
     pub fn new(size: usize) -> Grid {
         Grid {
