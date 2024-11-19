@@ -103,6 +103,21 @@ impl Grid {
         alive_neighbors as u32
     }
 
+    pub fn update(&mut self) {
+        let new_states: Vec<_> = self.cells
+	  .iter()
+	  .flatten()
+	  .enumerate()
+	  //Turn enumerate into coordinates
+	  .map(|a| (self.coordinate_from_position(a.0), a.1))
+	  .map(|a| (a.0, self.determine_new_state(a.0, a.1)))
+	  .map(|a| println!("{:?}",a))
+	  .collect();
+
+        // self.cells = new_grid;
+    }
+    
+
 }
 
 #[cfg(test)]
