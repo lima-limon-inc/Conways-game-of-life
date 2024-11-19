@@ -6,7 +6,7 @@ enum State {
 
 type Position = (usize, usize);
 
-struct Grid {
+pub struct Grid {
     cells: Vec<Vec<State>>,
 }
 
