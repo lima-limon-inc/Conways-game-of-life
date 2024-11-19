@@ -26,10 +26,11 @@ async fn main() {
 
     let mut grid = Grid::new(22);
 
-    // grid.change_state((2, 2), State::Alive);
-    // grid.change_state((2, 3), State::Alive);
-    // grid.change_state((1, 3), State::Alive);
-    // grid.change_state((0, 2), State::Alive);
+    grid.change_state((2, 1), State::Alive);
+    grid.change_state((2, 2), State::Alive);
+    grid.change_state((2, 3), State::Alive);
+    grid.change_state((1, 3), State::Alive);
+    grid.change_state((0, 2), State::Alive);
 
     
     let mut last_updated = get_time();
