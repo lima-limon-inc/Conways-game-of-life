@@ -50,7 +50,9 @@ impl Grid {
         (x, y)
     }
 
-    fn alive_neighbors_amount(&self, position: &Position) -> u32 {
+    fn alive_neighbors_amount(&self, position: Position) -> u32 {
+        println!("POSITION: {:?}", position);
+        
         let neighbor_change: [(i32, i32); 8] = [
             (0, 1),
             (1, 0),
@@ -68,11 +70,14 @@ impl Grid {
             .filter(|(x, y)| {
                 let limit: i32 = self.cells.len().try_into().unwrap();
                 *x < limit && *y < limit
+            })
+            .filter(|(x, y)| {
+                *x > 0 && *y > 0
             });
 
         let alive_neighbors = neighbors
             .map(|cell| (cell.0 as usize, cell.1 as usize))
-            .filter(|cell| self.get_cell(*cell) == State::Alive)
+            .filter(|cell| self.get_state(*cell) == State::Alive)
             .count();
 
         alive_neighbors as u32
