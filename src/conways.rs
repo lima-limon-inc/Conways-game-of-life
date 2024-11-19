@@ -105,7 +105,7 @@ impl Grid {
                 *x < limit && *y < limit
             })
             .filter(|(x, y)| {
-                *x > 0 && *y > 0
+                *x >= 0 && *y >= 0
             });
 
         let alive_neighbors = neighbors
