@@ -20,8 +20,8 @@ impl Grid {
     fn change_state(&mut self, position: Position, state: State) {
         let (x, y) = position;
 
-        let outer = &mut self.cells[y];
-        let inner = &mut outer[x];
+        let outer = &mut self.cells[x];
+        let inner = &mut outer[y];
 
         *inner = state;
     }
@@ -29,8 +29,8 @@ impl Grid {
     fn get_state(&self, position: Position) -> State {
         let (x, y) = position;
 
-        let outer = &self.cells[y];
-        let state = outer[x];
+        let outer = &self.cells[x];
+        let state = outer[y];
         return state;
     }
 
