@@ -38,7 +38,7 @@ async fn main() {
     let cube_width  = 30.0;
     let cube_height = 30.0;
 
-    let mut pause = true;
+    let mut pause = false;
 
     loop {
         clear_background(GRAY);
@@ -51,7 +51,7 @@ async fn main() {
 	      offset = 0;
 	  }
 	  match key {
-	      KeyCode::P => {if pause == true {pause = false;} else {pause = true}},
+	      KeyCode::P => {pause = !pause;},
 	      _ => (),
 	  }
         }
@@ -67,24 +67,24 @@ async fn main() {
 	      let offset_y = 0.0 + (cube_height + 0.0) * y as f32;
 
 	      // println!("{:?}", (x,y));
-	      draw_rectangle(offset_x as f32,  offset_y as f32, cube_width, cube_height, color);
+	      draw_rectangle(offset_x,  offset_y, cube_width, cube_height, color);
 	  }
         }
 
         draw_text("P to pause", 0.0, screen_height() - 50.0, 60.0, BLACK);
 
-        if get_time() - last_updated > UPDATE_INTERVAL && pause == false {
+        if get_time() - last_updated > UPDATE_INTERVAL && !pause {
             last_updated = get_time();
 	  grid.update();
         }
 
-        pause = check_for_events(&keys, &mut grid);
+        pause = check_for_events(&keys, &mut grid, pause);
 
         next_frame().await
     }
 }
 
-fn check_for_events(keys: &[KeyCode; 10], grid: &mut Grid) -> bool {
+fn check_for_events(keys: &[KeyCode; 10], grid: &mut Grid, pause: bool) -> bool {
     match keys {
         [KeyCode::Up, KeyCode::Up, KeyCode::Down, KeyCode::Down, KeyCode::Left, KeyCode::Right, KeyCode::Left, KeyCode::Right, KeyCode::A, KeyCode::B] => {
 
@@ -153,6 +153,6 @@ fn check_for_events(keys: &[KeyCode; 10], grid: &mut Grid) -> bool {
 
 	  true
         },
-        _ => false
+        _ => pause
     }
 }

@@ -39,8 +39,7 @@ impl Grid {
         let (x, y) = position;
 
         let outer = &self.cells[x];
-        let state = outer[y];
-        return state;
+        outer[y]
     }
 
     pub fn kill_all(&mut self) {
