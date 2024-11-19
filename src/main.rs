@@ -56,13 +56,15 @@ async fn main() {
 		State::Dead  => WHITE,
 	      };
 
-	      let offset_x = 0.0 + (cube_width + 10.0) * x as f32 + 5.0;
-	      let offset_y = 0.0 + (cube_width + 10.0) * y as f32;
+	      let offset_x = 0.0 + (cube_width + 0.0) * x as f32;
+	      let offset_y = 0.0 + (cube_height + 0.0) * y as f32;
 
-	      println!("{:?}", (x,y));
-	      draw_rectangle(offset_x as f32,  offset_y as f32, cube_width, cube_width, color);
+	      // println!("{:?}", (x,y));
+	      draw_rectangle(offset_x as f32,  offset_y as f32, cube_width, cube_height, color);
 	  }
         }
+
+        draw_text("P to pause", 0.0, screen_height() - 50.0, 60.0, BLACK);
 
         if get_time() - last_updated > UPDATE_INTERVAL {
             last_updated = get_time();
