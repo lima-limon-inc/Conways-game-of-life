@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, PartialEq, Copy)]
-enum State {
+pub enum State {
     Alive,
     Dead,
 }
@@ -17,7 +17,15 @@ impl Grid {
         }
     }
 
-    fn change_state(&mut self, position: Position, state: State) {
+    pub fn get_height(&self) -> usize {
+        self.cells.len()
+    }
+
+    pub fn get_width(&self) -> usize {
+        self.cells[0].len()
+    }
+
+    pub fn change_state(&mut self, position: Position, state: State) {
         let (x, y) = position;
 
         let outer = &mut self.cells[x];
@@ -26,12 +34,23 @@ impl Grid {
         *inner = state;
     }
 
-    fn get_state(&self, position: Position) -> State {
+    pub fn toggle_state(&mut self, position: Position) {
+        match self.get_state(position) {
+            State::Alive => self.change_state(position, State::Dead),
+            State::Dead => self.change_state(position, State::Alive),
+        }
+    }
+
+    pub fn get_state(&self, position: Position) -> State {
         let (x, y) = position;
 
         let outer = &self.cells[x];
-        let state = outer[y];
-        return state;
+        outer[y]
+    }
+
+    pub fn kill_all(&mut self) {
+        let new_cells = vec![vec![State::Dead; self.cells.len()]; self.cells.len()];
+        self.cells = new_cells;
     }
 
     fn determine_new_state(&self, position: Position, current_state: &State) -> State {
@@ -42,17 +61,13 @@ impl Grid {
                 State::Dead
             } else if alive_neighbours == 2 || alive_neighbours == 3 {
                 State::Alive
-            } else if alive_neighbours > 3 {
-                State::Dead
             } else {
                 State::Dead
             }
+        } else if alive_neighbours == 3 {
+            State::Alive
         } else {
-            if alive_neighbours == 3 {
-                State::Alive
-            } else {
-                State::Dead
-            }
+            State::Dead
         }
     }
 
@@ -71,6 +86,7 @@ impl Grid {
 
     // TODO: THis could use the Display trait instead of being
     // a separate function
+    #[cfg(test)]
     fn show_display(&self) {
         for i in 0..self.cells.len() {
             for j in 0..self.cells.len() {
