@@ -35,6 +35,13 @@ impl Grid {
         *inner = state;
     }
 
+    pub fn toggle_state(&mut self, position: Position) {
+        match self.get_state(position) {
+	  State::Alive => self.change_state(position, State::Dead),
+	  State::Dead => self.change_state(position, State::Alive),
+        }
+    }
+
     pub fn get_state(&self, position: Position) -> State {
         let (x, y) = position;
 
@@ -78,6 +85,7 @@ impl Grid {
 
         (x, y)
     }
+
 
     // TODO: THis could use the Display trait instead of being
     // a separate function

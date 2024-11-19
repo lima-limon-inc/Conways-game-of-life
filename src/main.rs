@@ -38,7 +38,7 @@ async fn main() {
     let cube_width  = 30.0;
     let cube_height = 30.0;
 
-    let mut pause = false;
+    let mut pause = true;
 
     loop {
         clear_background(GRAY);
@@ -64,17 +64,23 @@ async fn main() {
 	      let offset_x = 0.0 + (cube_width + 0.0) * x as f32;
 	      let offset_y = 0.0 + (cube_height + 0.0) * y as f32;
 
-	      // println!("{:?}", (x,y));
 	      draw_rectangle(offset_x,  offset_y, cube_width, cube_height, color);
 	  }
         }
 
-        draw_text("P to pause", 0.0, screen_height() - 50.0, 60.0, BLACK);
+        if is_mouse_button_pressed(MouseButton::Left) {
+            let (mouse_x, mouse_y) = mouse_position();
+            let mouse_x = (mouse_x / cube_width).ceil() - 1.0;
+            let mouse_y = (mouse_y / cube_height).ceil() - 1.0;
+	  grid.toggle_state((mouse_x as usize, mouse_y as usize));
+        }
 
         if get_time() - last_updated > UPDATE_INTERVAL && !pause {
             last_updated = get_time();
 	  grid.update();
         }
+
+        draw_text("P to (un)pause", 0.0, screen_height() - 50.0, 60.0, BLACK);
 
         pause = check_for_events(&keys, &mut grid, pause);
 
