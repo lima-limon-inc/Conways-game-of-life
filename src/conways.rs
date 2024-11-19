@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, PartialEq, Copy)]
-enum State {
+pub enum State {
     Alive,
     Dead,
 }
@@ -18,7 +18,15 @@ impl Grid {
         }
     }
 
-    fn change_state(&mut self, position: Position, state: State) {
+    pub fn get_height(&self) -> usize {
+        self.cells.len()
+    }
+
+    pub fn get_width(&self) -> usize {
+        self.cells[0].len()
+    }
+
+    pub fn change_state(&mut self, position: Position, state: State) {
         let (x, y) = position;
 
         let outer = &mut self.cells[x];
@@ -27,7 +35,7 @@ impl Grid {
         *inner = state;
     }
 
-    fn get_state(&self, position: Position) -> State {
+    pub fn get_state(&self, position: Position) -> State {
         let (x, y) = position;
 
         let outer = &self.cells[x];
