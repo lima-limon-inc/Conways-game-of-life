@@ -210,7 +210,7 @@ mod tests {
 
     
     #[test]
-    fn calculate_next_grid_1() {
+    fn kill_cell_overpopulation() {
         let mut grid = Grid::new(5);
         // Matrix of size 5
         // 0  1  2  3  4
@@ -233,7 +233,7 @@ mod tests {
     }
 
     #[test]
-    fn calculate_next_grid_2() {
+    fn kill_cell_starvation() {
         let mut grid = Grid::new(5);
         // Matrix of size 5
         // 0  1  2  3  4
@@ -251,7 +251,7 @@ mod tests {
     }
 
     #[test]
-    fn calculate_next_grid_3() {
+    fn keep_cell_alive_2_neighbours() {
         let mut grid = Grid::new(5);
         // Matrix of size 5
         // A  1  2  3  4
@@ -273,7 +273,7 @@ mod tests {
     }
 
     #[test]
-    fn calculate_next_grid_4() {
+    fn revive_cell_reproduction() {
         let mut grid = Grid::new(5);
         // Matrix of size 5
         // A  1  2  3  4
