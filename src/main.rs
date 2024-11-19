@@ -42,8 +42,6 @@ async fn main() {
 
     loop {
         clear_background(GRAY);
-        println!("{:?}", keys);
-
         if let Some(key) = get_last_key_pressed() {
 	  keys[offset] = key;
 	  offset += 1;
