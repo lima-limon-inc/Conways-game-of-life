@@ -215,4 +215,22 @@ mod tests {
         grid.update();
         assert_eq!(grid.get_state((3, 3)), State::Dead);
     }
+
+    #[test]
+    fn calculate_next_grid_2() {
+        let mut grid = Grid::new(5);
+        // Matrix of size 5
+        // 0  1  2  3  4
+        // 5  6  7  8  9
+        // 10 11 12 13 14
+        // 15 16  A 18 19
+        // 20 21 22 23 24
+
+        //17 should die, due to starvation
+
+        grid.change_state((2, 3), State::Alive);
+
+        grid.update();
+        assert_eq!(grid.get_state((2, 3)), State::Dead);
+    }
 }
