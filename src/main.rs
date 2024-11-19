@@ -26,6 +26,7 @@ async fn main() {
 
     let mut grid = Grid::new(22);
 
+    // Glider 
     grid.change_state((2, 1), State::Alive);
     grid.change_state((2, 2), State::Alive);
     grid.change_state((2, 3), State::Alive);
