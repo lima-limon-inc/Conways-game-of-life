@@ -10,7 +10,6 @@ pub struct Grid {
     cells: Vec<Vec<State>>,
 }
 
-
 impl Grid {
     pub fn new(size: usize) -> Grid {
         Grid {
@@ -37,8 +36,8 @@ impl Grid {
 
     pub fn toggle_state(&mut self, position: Position) {
         match self.get_state(position) {
-	  State::Alive => self.change_state(position, State::Dead),
-	  State::Dead => self.change_state(position, State::Alive),
+            State::Alive => self.change_state(position, State::Dead),
+            State::Dead => self.change_state(position, State::Alive),
         }
     }
 
@@ -50,7 +49,7 @@ impl Grid {
     }
 
     pub fn kill_all(&mut self) {
-            let new_cells = vec![vec![State::Dead; self.cells.len() ]; self.cells.len()];
+        let new_cells = vec![vec![State::Dead; self.cells.len()]; self.cells.len()];
         self.cells = new_cells;
     }
 
@@ -67,8 +66,7 @@ impl Grid {
             }
         } else if alive_neighbours == 3 {
             State::Alive
-        }
-        else {
+        } else {
             State::Dead
         }
     }
@@ -85,7 +83,6 @@ impl Grid {
 
         (x, y)
     }
-
 
     // TODO: THis could use the Display trait instead of being
     // a separate function
