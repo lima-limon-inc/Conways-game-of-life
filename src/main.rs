@@ -69,8 +69,8 @@ async fn main() {
 
         if is_mouse_button_pressed(MouseButton::Left) {
             let (mouse_x, mouse_y) = mouse_position();
-            let mouse_x = (mouse_x / cube_width).ceil() - 1.0;
-            let mouse_y = (mouse_y / cube_height).ceil() - 1.0;
+            let mouse_x = (mouse_x / cube_width).floor();
+            let mouse_y = (mouse_y / cube_height).floor();
             grid.toggle_state((mouse_x as usize, mouse_y as usize));
         }
 
