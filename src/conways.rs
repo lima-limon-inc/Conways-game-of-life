@@ -45,9 +45,7 @@ impl Grid {
         self.cells[0].len()
     }
 
-    pub fn change_state(&mut self, position: Position, state: State) {
-        let (x, y) = position;
-
+    pub fn change_state(&mut self, (x, y): Position, state: State) {
         let outer = &mut self.cells[x];
         let inner = &mut outer[y];
 
@@ -61,9 +59,7 @@ impl Grid {
         }
     }
 
-    pub fn get_state(&self, position: Position) -> State {
-        let (x, y) = position;
-
+    pub fn get_state(&self, (x, y): Position) -> State {
         let outer = &self.cells[x];
         outer[y]
     }
@@ -109,7 +105,7 @@ impl Grid {
     // #[cfg(test)]
     // fn show_display(&self) {}
 
-    fn alive_neighbors_amount(&self, position: Position) -> u32 {
+    fn alive_neighbors_amount(&self, (pos_x, pos_y): Position) -> u32 {
         let neighbor_change: [(i32, i32); 8] = [
             (0, 1),
             (1, 0),
@@ -123,7 +119,7 @@ impl Grid {
 
         let neighbors = neighbor_change
             .iter()
-            .map(|change| (change.0 + position.0 as i32, change.1 + position.1 as i32))
+            .map(|(change_x, change_y)| (change_x + pos_x as i32, change_y + pos_y as i32))
             .filter(|(x, y)| {
                 let limit: i32 = self.cells.len().try_into().unwrap();
                 *x < limit && *y < limit
@@ -131,7 +127,7 @@ impl Grid {
             .filter(|(x, y)| *x >= 0 && *y >= 0);
 
         let alive_neighbors = neighbors
-            .map(|cell| (cell.0 as usize, cell.1 as usize))
+            .map(|(x, y)| (x as usize, y as usize))
             .filter(|cell| self.get_state(*cell) == State::Alive)
             .count();
 
@@ -145,14 +141,14 @@ impl Grid {
             .flatten()
             .enumerate()
             //Turn enumerate into coordinates
-            .map(|a| self.coordinate_from_position(a.0))
+            .map(|(flat_position, _)| self.coordinate_from_position(flat_position))
             .map(|a| (a, self.get_state(a)))
-            .map(|a| (a.0, self.determine_new_state(a.0, &a.1)))
+            .map(|(coordinate, state)| (coordinate, self.determine_new_state(coordinate, &state)))
             .collect();
 
         // Apply side effects
-        for i in &new_states {
-            self.change_state(i.0, i.1);
+        for (coordinate, state) in &new_states {
+            self.change_state(*coordinate, *state);
         }
     }
 }
