@@ -1,3 +1,5 @@
+use std::fmt;
+
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub enum State {
     Alive,
@@ -8,6 +10,24 @@ type Position = (usize, usize);
 
 pub struct Grid {
     cells: Vec<Vec<State>>,
+}
+
+impl fmt::Debug for Grid {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut representation = String::new();
+        for i in 0..self.cells.len() {
+            for j in 0..self.cells.len() {
+                if self.get_state((j, i)) == State::Alive {
+                    representation.push('A');
+                } else {
+                    representation.push('D');
+                }
+            }
+
+            representation.push('\n');
+        }
+        write!(f, "{}", representation)
+    }
 }
 
 impl Grid {
@@ -86,19 +106,8 @@ impl Grid {
 
     // TODO: THis could use the Display trait instead of being
     // a separate function
-    #[cfg(test)]
-    fn show_display(&self) {
-        for i in 0..self.cells.len() {
-            for j in 0..self.cells.len() {
-                if self.get_state((j, i)) == State::Alive {
-                    print!("A");
-                } else {
-                    print!("D");
-                }
-            }
-            println!()
-        }
-    }
+    // #[cfg(test)]
+    // fn show_display(&self) {}
 
     fn alive_neighbors_amount(&self, position: Position) -> u32 {
         let neighbor_change: [(i32, i32); 8] = [
@@ -278,7 +287,8 @@ mod tests {
 
         grid.change_state((0, 1), State::Alive);
 
-        grid.show_display();
+        // grid.show_display();
+        println!("{:?}", grid);
         grid.update();
         assert_eq!(grid.get_state((0, 1)), State::Alive);
     }
@@ -302,7 +312,7 @@ mod tests {
         // It should start out dead. We kill the cell just in case.
         grid.change_state((0, 1), State::Dead);
 
-        grid.show_display();
+        println!("{:?}", grid);
         grid.update();
         assert_eq!(grid.get_state((0, 1)), State::Alive);
     }
