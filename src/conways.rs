@@ -37,12 +37,8 @@ impl Grid {
         }
     }
 
-    pub fn get_height(&self) -> usize {
+    pub fn get_size(&self) -> usize {
         self.cells.len()
-    }
-
-    pub fn get_width(&self) -> usize {
-        self.cells[0].len()
     }
 
     pub fn change_state(&mut self, (x, y): Position, state: State) {

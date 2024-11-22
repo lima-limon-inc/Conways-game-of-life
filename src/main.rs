@@ -26,7 +26,7 @@ async fn main() {
 
     let mut grid = Grid::new(22);
 
-    // Glider 
+    // Glider
     grid.change_state((2, 1), State::Alive);
     grid.change_state((2, 2), State::Alive);
     grid.change_state((2, 3), State::Alive);
@@ -53,8 +53,8 @@ async fn main() {
             }
         }
 
-        for x in 0..grid.get_height() {
-            for y in 0..grid.get_width() {
+        for x in 0..grid.get_size() {
+            for y in 0..grid.get_size() {
                 let color = match grid.get_state((x, y)) {
                     State::Alive => BLACK,
                     State::Dead => WHITE,
