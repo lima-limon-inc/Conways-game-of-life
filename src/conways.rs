@@ -72,18 +72,10 @@ impl Grid {
     fn determine_new_state(&self, position: Position, current_state: &State) -> State {
         let alive_neighbours = self.alive_neighbors_amount(position);
 
-        if *current_state == State::Alive {
-            if alive_neighbours < 2 {
-                State::Dead
-            } else if alive_neighbours == 2 || alive_neighbours == 3 {
-                State::Alive
-            } else {
-                State::Dead
-            }
-        } else if alive_neighbours == 3 {
-            State::Alive
-        } else {
-            State::Dead
+        match (*current_state, alive_neighbours) {
+            (State::Alive, 2 | 3) => State::Alive,
+            (State::Dead, 3) => State::Alive,
+            _ => State::Dead,
         }
     }
 
