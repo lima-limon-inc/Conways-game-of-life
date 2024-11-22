@@ -14,19 +14,20 @@ pub struct Grid {
 
 impl fmt::Debug for Grid {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut representation = String::new();
+        writeln!(f, "")?;
+
         for i in 0..self.cells.len() {
             for j in 0..self.cells.len() {
                 if self.get_state((j, i)) == State::Alive {
-                    representation.push('A');
+                    write!(f, "A")?;
                 } else {
-                    representation.push('D');
+                    write!(f, "D")?;
                 }
             }
 
-            representation.push('\n');
+            writeln!(f, "")?;
         }
-        write!(f, "{}", representation)
+        writeln!(f, "")
     }
 }
 
