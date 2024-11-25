@@ -1,8 +1,10 @@
+use std::time::{Duration, SystemTime};
+
 use macroquad::prelude::*;
 
-const UPDATE_INTERVAL: f64 = 0.3;
-
 const SPACE_FOR_TEXT: i32 = 200;
+
+const MS_PER_UPDATE: Duration = Duration::from_millis(500);
 
 mod conways;
 
@@ -31,14 +33,21 @@ async fn main() {
     grid.change_state((1, 3), conways::State::Alive);
     grid.change_state((0, 2), conways::State::Alive);
 
-    let mut last_updated = get_time();
+    let mut last_time = SystemTime::now();
 
     let cube_width = 30.0;
     let cube_height = 30.0;
 
     let mut pause = true;
 
+    let mut lag = Duration::default();
+
     loop {
+        let current = SystemTime::now();
+        let elapsed = current.duration_since(last_time).unwrap();
+        last_time = current;
+        lag += elapsed;
+
         clear_background(GRAY);
         if let Some(key) = get_last_key_pressed() {
             keys[offset] = key;
@@ -72,8 +81,8 @@ async fn main() {
             grid.toggle_state((mouse_x as usize, mouse_y as usize));
         }
 
-        if get_time() - last_updated > UPDATE_INTERVAL && !pause {
-            last_updated = get_time();
+        while lag >= MS_PER_UPDATE && !pause {
+            lag -= MS_PER_UPDATE;
             grid.update();
         }
 
