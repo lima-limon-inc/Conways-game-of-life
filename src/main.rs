@@ -1,12 +1,12 @@
-use macroquad::prelude::*;
+use std::time::{Duration, SystemTime};
 
-const UPDATE_INTERVAL: f64 = 0.3;
+use macroquad::prelude::*;
 
 const SPACE_FOR_TEXT: i32 = 200;
 
-mod conways;
+const MS_PER_UPDATE: Duration = Duration::from_millis(500);
 
-use conways::*;
+mod conways;
 
 fn conf() -> Conf {
     Conf {
@@ -24,23 +24,30 @@ async fn main() {
     let mut keys: [KeyCode; 10] = [KeyCode::Space; 10];
     let mut offset = 0;
 
-    let mut grid = Grid::new(22);
+    let mut grid = conways::Grid::new(22);
 
-    // Glider 
-    grid.change_state((2, 1), State::Alive);
-    grid.change_state((2, 2), State::Alive);
-    grid.change_state((2, 3), State::Alive);
-    grid.change_state((1, 3), State::Alive);
-    grid.change_state((0, 2), State::Alive);
+    // Glider
+    grid.change_state((2, 1), conways::State::Alive);
+    grid.change_state((2, 2), conways::State::Alive);
+    grid.change_state((2, 3), conways::State::Alive);
+    grid.change_state((1, 3), conways::State::Alive);
+    grid.change_state((0, 2), conways::State::Alive);
 
-    let mut last_updated = get_time();
+    let mut last_time = SystemTime::now();
 
     let cube_width = 30.0;
     let cube_height = 30.0;
 
     let mut pause = true;
 
+    let mut lag = Duration::default();
+
     loop {
+        let current = SystemTime::now();
+        let elapsed = current.duration_since(last_time).unwrap();
+        last_time = current;
+        lag += elapsed;
+
         clear_background(GRAY);
         if let Some(key) = get_last_key_pressed() {
             keys[offset] = key;
@@ -53,11 +60,11 @@ async fn main() {
             }
         }
 
-        for x in 0..grid.get_height() {
-            for y in 0..grid.get_width() {
+        for x in 0..grid.get_size() {
+            for y in 0..grid.get_size() {
                 let color = match grid.get_state((x, y)) {
-                    State::Alive => BLACK,
-                    State::Dead => WHITE,
+                    conways::State::Alive => BLACK,
+                    conways::State::Dead => WHITE,
                 };
 
                 let offset_x = 0.0 + (cube_width + 0.0) * x as f32;
@@ -74,8 +81,8 @@ async fn main() {
             grid.toggle_state((mouse_x as usize, mouse_y as usize));
         }
 
-        if get_time() - last_updated > UPDATE_INTERVAL && !pause {
-            last_updated = get_time();
+        while lag >= MS_PER_UPDATE && !pause {
+            lag -= MS_PER_UPDATE;
             grid.update();
         }
 
@@ -87,72 +94,72 @@ async fn main() {
     }
 }
 
-fn check_for_events(keys: &[KeyCode; 10], grid: &mut Grid, pause: bool) -> bool {
+fn check_for_events(keys: &[KeyCode; 10], grid: &mut conways::Grid, pause: bool) -> bool {
     match keys {
         [KeyCode::Up, KeyCode::Up, KeyCode::Down, KeyCode::Down, KeyCode::Left, KeyCode::Right, KeyCode::Left, KeyCode::Right, KeyCode::B, KeyCode::A] =>
         {
             grid.kill_all();
 
             // Hmm, I wonder what this does 🤔
-            grid.change_state((9, 1), State::Alive);
-            grid.change_state((8, 1), State::Alive);
-            grid.change_state((7, 2), State::Alive);
-            grid.change_state((10, 2), State::Alive);
-            grid.change_state((10, 3), State::Alive);
-            grid.change_state((10, 4), State::Alive);
-            grid.change_state((11, 5), State::Alive);
-            grid.change_state((11, 6), State::Alive);
-            grid.change_state((11, 7), State::Alive);
-            grid.change_state((12, 8), State::Alive);
-            grid.change_state((12, 9), State::Alive);
-            grid.change_state((13, 10), State::Alive);
-            grid.change_state((14, 10), State::Alive);
-            grid.change_state((15, 9), State::Alive);
+            grid.change_state((9, 1), conways::State::Alive);
+            grid.change_state((8, 1), conways::State::Alive);
+            grid.change_state((7, 2), conways::State::Alive);
+            grid.change_state((10, 2), conways::State::Alive);
+            grid.change_state((10, 3), conways::State::Alive);
+            grid.change_state((10, 4), conways::State::Alive);
+            grid.change_state((11, 5), conways::State::Alive);
+            grid.change_state((11, 6), conways::State::Alive);
+            grid.change_state((11, 7), conways::State::Alive);
+            grid.change_state((12, 8), conways::State::Alive);
+            grid.change_state((12, 9), conways::State::Alive);
+            grid.change_state((13, 10), conways::State::Alive);
+            grid.change_state((14, 10), conways::State::Alive);
+            grid.change_state((15, 9), conways::State::Alive);
 
-            grid.change_state((10, 8), State::Alive);
-            grid.change_state((9, 9), State::Alive);
-            grid.change_state((8, 10), State::Alive);
+            grid.change_state((10, 8), conways::State::Alive);
+            grid.change_state((9, 9), conways::State::Alive);
+            grid.change_state((8, 10), conways::State::Alive);
 
-            grid.change_state((0, 15), State::Alive);
-            grid.change_state((1, 15), State::Alive);
-            grid.change_state((2, 15), State::Alive);
-            grid.change_state((0, 14), State::Alive);
-            grid.change_state((0, 13), State::Alive);
-            grid.change_state((0, 12), State::Alive);
-            grid.change_state((1, 12), State::Alive);
-            grid.change_state((2, 12), State::Alive);
+            grid.change_state((0, 15), conways::State::Alive);
+            grid.change_state((1, 15), conways::State::Alive);
+            grid.change_state((2, 15), conways::State::Alive);
+            grid.change_state((0, 14), conways::State::Alive);
+            grid.change_state((0, 13), conways::State::Alive);
+            grid.change_state((0, 12), conways::State::Alive);
+            grid.change_state((1, 12), conways::State::Alive);
+            grid.change_state((2, 12), conways::State::Alive);
 
-            grid.change_state((4, 14), State::Alive);
-            grid.change_state((4, 13), State::Alive);
-            grid.change_state((4, 12), State::Alive);
-            grid.change_state((4, 15), State::Alive);
-            grid.change_state((5, 15), State::Alive);
-            grid.change_state((6, 15), State::Alive);
+            grid.change_state((4, 14), conways::State::Alive);
+            grid.change_state((4, 13), conways::State::Alive);
+            grid.change_state((4, 12), conways::State::Alive);
+            grid.change_state((4, 15), conways::State::Alive);
+            grid.change_state((5, 15), conways::State::Alive);
+            grid.change_state((6, 15), conways::State::Alive);
 
-            grid.change_state((8, 14), State::Alive);
-            grid.change_state((8, 13), State::Alive);
-            grid.change_state((8, 12), State::Alive);
-            grid.change_state((8, 15), State::Alive);
-            grid.change_state((10, 14), State::Alive);
-            grid.change_state((10, 13), State::Alive);
-            grid.change_state((10, 12), State::Alive);
-            grid.change_state((10, 15), State::Alive);
-            grid.change_state((9, 12), State::Alive);
-            grid.change_state((9, 14), State::Alive);
+            grid.change_state((8, 14), conways::State::Alive);
+            grid.change_state((8, 13), conways::State::Alive);
+            grid.change_state((8, 12), conways::State::Alive);
+            grid.change_state((8, 15), conways::State::Alive);
+            grid.change_state((10, 14), conways::State::Alive);
+            grid.change_state((10, 13), conways::State::Alive);
+            grid.change_state((10, 12), conways::State::Alive);
+            grid.change_state((10, 15), conways::State::Alive);
+            grid.change_state((9, 12), conways::State::Alive);
+            grid.change_state((9, 14), conways::State::Alive);
 
-            grid.change_state((12, 13), State::Alive);
-            grid.change_state((13, 12), State::Alive);
-            grid.change_state((14, 12), State::Alive);
-            grid.change_state((12, 15), State::Alive);
-            grid.change_state((13, 15), State::Alive);
-            grid.change_state((14, 14), State::Alive);
+            grid.change_state((12, 13), conways::State::Alive);
+            grid.change_state((13, 12), conways::State::Alive);
+            grid.change_state((14, 12), conways::State::Alive);
+            grid.change_state((12, 15), conways::State::Alive);
+            grid.change_state((13, 15), conways::State::Alive);
+            grid.change_state((14, 14), conways::State::Alive);
 
-            grid.change_state((16, 13), State::Alive);
-            grid.change_state((17, 12), State::Alive);
-            grid.change_state((18, 12), State::Alive);
-            grid.change_state((16, 15), State::Alive);
-            grid.change_state((17, 15), State::Alive);
-            grid.change_state((18, 14), State::Alive);
+            grid.change_state((16, 13), conways::State::Alive);
+            grid.change_state((17, 12), conways::State::Alive);
+            grid.change_state((18, 12), conways::State::Alive);
+            grid.change_state((16, 15), conways::State::Alive);
+            grid.change_state((17, 15), conways::State::Alive);
+            grid.change_state((18, 14), conways::State::Alive);
 
             true
         }

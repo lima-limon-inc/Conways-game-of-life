@@ -1,3 +1,5 @@
+use std::fmt;
+
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub enum State {
     Alive,
@@ -10,6 +12,25 @@ pub struct Grid {
     cells: Vec<Vec<State>>,
 }
 
+impl fmt::Debug for Grid {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "")?;
+
+        for i in 0..self.cells.len() {
+            for j in 0..self.cells.len() {
+                if self.get_state((j, i)) == State::Alive {
+                    write!(f, "A")?;
+                } else {
+                    write!(f, "D")?;
+                }
+            }
+
+            writeln!(f, "")?;
+        }
+        writeln!(f, "")
+    }
+}
+
 impl Grid {
     pub fn new(size: usize) -> Grid {
         Grid {
@@ -17,17 +38,11 @@ impl Grid {
         }
     }
 
-    pub fn get_height(&self) -> usize {
+    pub fn get_size(&self) -> usize {
         self.cells.len()
     }
 
-    pub fn get_width(&self) -> usize {
-        self.cells[0].len()
-    }
-
-    pub fn change_state(&mut self, position: Position, state: State) {
-        let (x, y) = position;
-
+    pub fn change_state(&mut self, (x, y): Position, state: State) {
         let outer = &mut self.cells[x];
         let inner = &mut outer[y];
 
@@ -41,9 +56,7 @@ impl Grid {
         }
     }
 
-    pub fn get_state(&self, position: Position) -> State {
-        let (x, y) = position;
-
+    pub fn get_state(&self, (x, y): Position) -> State {
         let outer = &self.cells[x];
         outer[y]
     }
@@ -56,18 +69,10 @@ impl Grid {
     fn determine_new_state(&self, position: Position, current_state: &State) -> State {
         let alive_neighbours = self.alive_neighbors_amount(position);
 
-        if *current_state == State::Alive {
-            if alive_neighbours < 2 {
-                State::Dead
-            } else if alive_neighbours == 2 || alive_neighbours == 3 {
-                State::Alive
-            } else {
-                State::Dead
-            }
-        } else if alive_neighbours == 3 {
-            State::Alive
-        } else {
-            State::Dead
+        match (*current_state, alive_neighbours) {
+            (State::Alive, 2 | 3) => State::Alive,
+            (State::Dead, 3) => State::Alive,
+            _ => State::Dead,
         }
     }
 
@@ -86,21 +91,10 @@ impl Grid {
 
     // TODO: THis could use the Display trait instead of being
     // a separate function
-    #[cfg(test)]
-    fn show_display(&self) {
-        for i in 0..self.cells.len() {
-            for j in 0..self.cells.len() {
-                if self.get_state((j, i)) == State::Alive {
-                    print!("A");
-                } else {
-                    print!("D");
-                }
-            }
-            println!()
-        }
-    }
+    // #[cfg(test)]
+    // fn show_display(&self) {}
 
-    fn alive_neighbors_amount(&self, position: Position) -> u32 {
+    fn alive_neighbors_amount(&self, (pos_x, pos_y): Position) -> u32 {
         let neighbor_change: [(i32, i32); 8] = [
             (0, 1),
             (1, 0),
@@ -114,7 +108,7 @@ impl Grid {
 
         let neighbors = neighbor_change
             .iter()
-            .map(|change| (change.0 + position.0 as i32, change.1 + position.1 as i32))
+            .map(|(change_x, change_y)| (change_x + pos_x as i32, change_y + pos_y as i32))
             .filter(|(x, y)| {
                 let limit: i32 = self.cells.len().try_into().unwrap();
                 *x < limit && *y < limit
@@ -122,7 +116,7 @@ impl Grid {
             .filter(|(x, y)| *x >= 0 && *y >= 0);
 
         let alive_neighbors = neighbors
-            .map(|cell| (cell.0 as usize, cell.1 as usize))
+            .map(|(x, y)| (x as usize, y as usize))
             .filter(|cell| self.get_state(*cell) == State::Alive)
             .count();
 
@@ -136,14 +130,14 @@ impl Grid {
             .flatten()
             .enumerate()
             //Turn enumerate into coordinates
-            .map(|a| self.coordinate_from_position(a.0))
+            .map(|(flat_position, _)| self.coordinate_from_position(flat_position))
             .map(|a| (a, self.get_state(a)))
-            .map(|a| (a.0, self.determine_new_state(a.0, &a.1)))
+            .map(|(coordinate, state)| (coordinate, self.determine_new_state(coordinate, &state)))
             .collect();
 
         // Apply side effects
-        for i in &new_states {
-            self.change_state(i.0, i.1);
+        for (coordinate, state) in &new_states {
+            self.change_state(*coordinate, *state);
         }
     }
 }
@@ -278,7 +272,8 @@ mod tests {
 
         grid.change_state((0, 1), State::Alive);
 
-        grid.show_display();
+        // grid.show_display();
+        println!("{:?}", grid);
         grid.update();
         assert_eq!(grid.get_state((0, 1)), State::Alive);
     }
@@ -302,7 +297,7 @@ mod tests {
         // It should start out dead. We kill the cell just in case.
         grid.change_state((0, 1), State::Dead);
 
-        grid.show_display();
+        println!("{:?}", grid);
         grid.update();
         assert_eq!(grid.get_state((0, 1)), State::Alive);
     }
